@@ -77,8 +77,9 @@ src/
 ### 第二步：创建 Cloudflare R2 存储桶
 
 1. 登录 [Cloudflare Dashboard](https://dash.cloudflare.com/)
-2. 进入 **R2 对象存储** → **创建存储桶**
+2. 进入 **存储和数据库** → **R2 对象存储** → **概述** → **创建存储桶**
 3. 存储桶名称填写 `keymc-vault`（必须与 `wrangler.toml` 中的 `bucket_name` 一致）
+4. 位置可以选择最近的，国内则亚太，默认存储类标准即可。
 4. 点击 **创建存储桶**
 
 > 如果你想使用其他名称，需要同时修改 `wrangler.toml` 中的 `bucket_name`。
@@ -91,18 +92,16 @@ src/
 2. 点击 **创建 API 令牌**
 3. 配置：
    - **令牌名称**：`keymc-access`（或任意名称）
-   - **权限**：选择 **对象读** 和 **对象写**
-   - **Developer Platform中的Workers R2 Storage和Pages**
-   - **指定存储桶**：选择 `keymc-vault`
+   - **权限策略**：选择Developer Platform中的Workers R2 Storage 读写都勾选后审核令牌
 4. 点击 **创建 API 令牌**
 5. **复制生成的令牌值**（只显示一次，请妥善保存）
 
-> ⚠️ 这个令牌不是 KeyMC 的 ACCESS_TOKEN，而是 R2 的 API 令牌。
+> 这个令牌不是 KeyMC 的 ACCESS_TOKEN，而是 R2 的 API 令牌。
 > KeyMC 使用的是自己定义的 ACCESS_TOKEN 环境变量。
 
 ### 第四步：部署到 Cloudflare Pages
 
-1. 在 Cloudflare Dashboard，进入 **Workers 和 Pages** → **创建** → **Pages** → **连接到 Git**
+1. 在 Cloudflare Dashboard，进入 **Workers 和 Pages** → **创建** → **点击下方的Pages 开始使用** → **导入现有Git存储库**
 2. 选择你 Fork 的 KeyMC 仓库
 3. 配置构建设置：
    - **框架预设**：`SvelteKit`
@@ -114,8 +113,9 @@ src/
 
 ### 第五步：配置环境变量
 
-1. 在 Cloudflare Pages 项目页面，进入 **设置** → **环境变量**
+1. 在 Cloudflare Pages 项目页面，进入 **设置** → **选择环境：生产**
 2. 添加一个 **机密（加密变量）**：
+   - 类型选择 **密钥**
    - 变量名：`ACCESS_TOKEN`
    - 值：你自己设定的一个密码
    - **注意要在生成环境中进行设置**
@@ -123,7 +123,7 @@ src/
 > ACCESS_TOKEN 是你登录 KeyMC 时需要输入的访问令牌，请牢记。
 
 
-### 第六步：绑定 R2 存储桶
+### 第六步：绑定 R2 存储桶（如未更改存储桶名称则无需设置）
 
 1. 在 Cloudflare Pages 项目页面，进入 **设置** → **函数** → **R2 存储桶绑定**
 2. 点击 **添加绑定**
